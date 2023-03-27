@@ -1,32 +1,34 @@
-import { ValidationPipe } from './../pipes/validation.pipe';
-import { CreateUserDto } from '../users/dto/create-user.dto';
-import { Body, Controller, Post, UsePipes } from '@nestjs/common';
-import { AuthService } from './auth.service';
-import { ApiBody, ApiOkResponse, ApiOperation, ApiTags } from '@nestjs/swagger';
+import * as Swagger from '@nestjs/swagger';
+import * as NestDecorators from '@nestjs/common';
 
-@ApiTags('Authentication')
-@Controller('auth')
+import { ValidationPipe } from './../pipes/validation.pipe';
+import { AuthService } from './auth.service';
+import { CreateUserDto, LoginUserDto } from 'src/users/dto/user.dto';
+
+@Swagger.ApiTags('Authentication')
+@NestDecorators.Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   // ---------- Login User ---------- //
 
-  @Post('/login')
-  login(@Body() userDto: CreateUserDto) {
-    return this.authService.login(userDto);
+  @Swagger.ApiOperation({ summary: 'Login User' })
+  @NestDecorators.Post('/login')
+  login(@NestDecorators.Body() dto: LoginUserDto) {
+    return this.authService.login(dto);
   }
 
   // ---------- Registration User ---------- //
 
-  @ApiOperation({ summary: 'Create User' })
-  @ApiOkResponse({ description: 'Created user object as response' })
-  @ApiBody({
+  @Swagger.ApiOperation({ summary: 'Create User' })
+  @Swagger.ApiOkResponse({ description: 'Created user object as response' })
+  @Swagger.ApiBody({
     type: CreateUserDto,
     description: 'Request body for user registration',
   })
-  @UsePipes(ValidationPipe)
-  @Post('/registration')
-  registration(@Body() userDto: CreateUserDto) {
-    return this.authService.registration(userDto);
+  @NestDecorators.UsePipes(ValidationPipe)
+  @NestDecorators.Post('/registration')
+  registration(@NestDecorators.Body() dto: CreateUserDto) {
+    return this.authService.registration(dto);
   }
 }

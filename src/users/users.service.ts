@@ -1,14 +1,8 @@
-import {
-  HttpException,
-  HttpStatus,
-  Injectable,
-  NotFoundException,
-} from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { RolesService } from 'src/roles/roles.service';
-import { AddRoleDto } from './dto/add-role.dto';
 import { BanUserDto } from './dto/ban-user.dto';
-import { CreateUserDto } from './dto/create-user.dto';
+import { ChangeRoleDto, CreateUserDto } from './dto/user.dto';
 import { User } from './user.model';
 
 @Injectable()
@@ -47,7 +41,7 @@ export class UsersService {
 
   // ---------- Add Role to User ---------- //
 
-  async getRole(dto: AddRoleDto) {
+  async getRole(dto: ChangeRoleDto) {
     const user = await this.userRepository.findByPk(dto.userId);
     const role = await this.roleService.getRoleByValue(dto.value);
 
@@ -60,7 +54,7 @@ export class UsersService {
 
   // ---------- Remove Role from User ---------- //
 
-  async removeRole(dto: AddRoleDto) {
+  async removeRole(dto: ChangeRoleDto) {
     const user = await this.userRepository.findByPk(dto.userId);
     const role = await this.roleService.getRoleByValue(dto.value);
 

@@ -23,15 +23,15 @@ export class User extends Model<User> {
   })
   id: number;
 
-  @ApiProperty({ example: 'Dagget', description: 'User name' })
+  @ApiProperty({ example: 'Bobby', description: 'User name' })
   @Column({ type: DataType.STRING, allowNull: false })
   name: string;
 
-  @ApiProperty({ example: 'beaver@river.com', description: 'User email' })
+  @ApiProperty({ example: 'bobby@man.com', description: 'User email' })
   @Column({ type: DataType.STRING, unique: true, allowNull: false })
   email: string;
 
-  @ApiProperty({ example: '12345sdsd', description: 'User password' })
+  @ApiProperty({ example: '123456', description: 'User password' })
   @Column({ type: DataType.STRING, allowNull: false })
   password: string;
 

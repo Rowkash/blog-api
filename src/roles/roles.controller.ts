@@ -1,20 +1,27 @@
+import * as Swagger from '@nestjs/swagger';
+import * as NestDecorators from '@nestjs/common';
+
 import { CreateRoleDto } from './dto/role-create.dto';
 import { RolesService } from './roles.service';
-import { Body, Controller, Get, Param, Post } from '@nestjs/common';
-import { ApiTags } from '@nestjs/swagger';
 
-@ApiTags('Roles')
-@Controller('roles')
+@Swagger.ApiTags('Roles')
+@NestDecorators.Controller('roles')
 export class RolesController {
   constructor(private roleService: RolesService) {}
 
-  @Post()
-  create(@Body() roleDto: CreateRoleDto) {
+  // ---------- Create Role ---------- //
+
+  @Swagger.ApiOperation({ summary: 'Create Role' })
+  @NestDecorators.Post()
+  create(@NestDecorators.Body() roleDto: CreateRoleDto) {
     return this.roleService.createRole(roleDto);
   }
 
-  @Get('/:value')
-  getOne(@Param('value') value: string) {
+  // ---------- Get Role by Value ---------- //
+
+  @Swagger.ApiOperation({ summary: 'Get Role by Value' })
+  @NestDecorators.Get('/:value')
+  getOne(@NestDecorators.Param('value') value: string) {
     return this.roleService.getRoleByValue(value);
   }
 }

@@ -1,38 +1,28 @@
-import { CreateCommentDto } from './dto/create-comment.dto';
-import { CommentsService } from './comments.service';
-import {
-  Body,
-  Controller,
-  Delete,
-  Get,
-  Param,
-  ParseIntPipe,
-  Post,
-  Put,
-  Request,
-  UseGuards,
-} from '@nestjs/common';
+import * as NestDecorators from '@nestjs/common';
+import * as Swagger from '@nestjs/swagger';
+
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { CommentAuthorGuard } from 'src/guards/comment-author.guard';
-import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
+import { CreateCommentDto } from './dto/create-comment.dto';
+import { CommentsService } from './comments.service';
 import { Comment } from './comment.model';
 
-@ApiTags('Comments')
-@Controller('articles/:articleId/comments')
+@Swagger.ApiTags('Comments')
+@NestDecorators.Controller('articles/:articleId/comments')
 export class CommentsController {
   constructor(private commentsService: CommentsService) {}
 
   // ---------- Create Comment ---------- //
 
-  @ApiOperation({ summary: 'Create comment' })
-  @ApiResponse({ status: 200, type: Comment })
-  @ApiResponse({ status: 400, type: Comment })
-  @UseGuards(JwtAuthGuard)
-  @Post()
+  @Swagger.ApiOperation({ summary: 'Create comment' })
+  @Swagger.ApiCreatedResponse({ type: Comment })
+  @NestDecorators.UseGuards(JwtAuthGuard)
+  @NestDecorators.Post()
   create(
-    @Body() dto: CreateCommentDto,
-    @Request() req,
-    @Param('articleId', ParseIntPipe) articleId: number,
+    @NestDecorators.Body() dto: CreateCommentDto,
+    @NestDecorators.Request() req,
+    @NestDecorators.Param('articleId', NestDecorators.ParseIntPipe)
+    articleId: number,
   ) {
     const authorId = req.user.id;
     return this.commentsService.createComment(dto, articleId, authorId);
@@ -40,13 +30,17 @@ export class CommentsController {
 
   // ---------- Create Child Comment ---------- //
 
-  @UseGuards(JwtAuthGuard)
-  @Post('/:parentId')
+  @Swagger.ApiOperation({ summary: 'Create Child Comment' })
+  @Swagger.ApiCreatedResponse({ type: Comment })
+  @NestDecorators.UseGuards(JwtAuthGuard)
+  @NestDecorators.Post('/:parentId')
   createChildComment(
-    @Body() dto: CreateCommentDto,
-    @Request() req,
-    @Param('articleId', ParseIntPipe) articleId: number,
-    @Param('parentId', ParseIntPipe) parentId: number,
+    @NestDecorators.Body() dto: CreateCommentDto,
+    @NestDecorators.Request() req,
+    @NestDecorators.Param('articleId', NestDecorators.ParseIntPipe)
+    articleId: number,
+    @NestDecorators.Param('parentId', NestDecorators.ParseIntPipe)
+    parentId: number,
   ) {
     const authorId = req.user.id;
     return this.commentsService.createChildComment(
@@ -56,40 +50,56 @@ export class CommentsController {
       parentId,
     );
   }
-  // ---------- Get Comment ---------- //
+  // ---------- Get Comment by ID ---------- //
 
-  @UseGuards(JwtAuthGuard)
-  @Get('/:commentId')
-  getOne(@Param('commentId', ParseIntPipe) commentId: number) {
+  @Swagger.ApiOperation({ summary: 'Get Comment by ID' })
+  @Swagger.ApiOkResponse({ type: Comment })
+  @NestDecorators.UseGuards(JwtAuthGuard)
+  @NestDecorators.Get('/:commentId')
+  getOne(
+    @NestDecorators.Param('commentId', NestDecorators.ParseIntPipe)
+    commentId: number,
+  ) {
     return this.commentsService.getCommentById(commentId);
   }
 
-  // ---------- Get All Article Comments
+  // ---------- Get All Article Comments ---------- //
 
-  @ApiOperation({ summary: 'Get all articles comments' })
-  @ApiResponse({ status: 200, type: [Comment] })
-  @UseGuards(JwtAuthGuard)
-  @Get()
-  getAll(@Param('articleId', ParseIntPipe) articleId: number) {
+  @Swagger.ApiOperation({ summary: 'Get all article comments' })
+  @Swagger.ApiOkResponse({ type: [Comment] })
+  @NestDecorators.UseGuards(JwtAuthGuard)
+  @NestDecorators.Get()
+  getAll(
+    @NestDecorators.Param('articleId', NestDecorators.ParseIntPipe)
+    articleId: number,
+  ) {
     return this.commentsService.getAllArticleComments(articleId);
   }
 
-  // ---------- Update Article Comment ---------- //
+  // ---------- Update Article Comment by ID ---------- //
 
-  @UseGuards(JwtAuthGuard, CommentAuthorGuard)
-  @Put('/:commentId')
+  @Swagger.ApiOperation({ summary: 'Update Article Comment by ID' })
+  @Swagger.ApiOkResponse({ type: Comment })
+  @NestDecorators.UseGuards(JwtAuthGuard, CommentAuthorGuard)
+  @NestDecorators.Put('/:commentId')
   update(
-    @Body() dto: CreateCommentDto,
-    @Param('commentId', ParseIntPipe) commentId: number,
+    @NestDecorators.Body() dto: CreateCommentDto,
+    @NestDecorators.Param('commentId', NestDecorators.ParseIntPipe)
+    commentId: number,
   ) {
     return this.commentsService.updateComment(commentId, dto);
   }
 
-  // ---------- Delete Article Comment ---------- //
+  // ---------- Delete Article Comment by ID ---------- //
 
-  @UseGuards(JwtAuthGuard, CommentAuthorGuard)
-  @Delete('/:commentId')
-  delete(@Param('commentId', ParseIntPipe) commentId: number) {
+  @Swagger.ApiOperation({ summary: 'Delete Article Comment by ID' })
+  @Swagger.ApiNoContentResponse()
+  @NestDecorators.UseGuards(JwtAuthGuard, CommentAuthorGuard)
+  @NestDecorators.Delete('/:commentId')
+  delete(
+    @NestDecorators.Param('commentId', NestDecorators.ParseIntPipe)
+    commentId: number,
+  ) {
     return this.commentsService.deleteComment(commentId);
   }
 }

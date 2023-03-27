@@ -13,7 +13,7 @@ import { ApiProperty } from '@nestjs/swagger';
 
 @Table({ tableName: 'articles' })
 export class Article extends Model<Article> {
-  @ApiProperty({ example: '1', description: 'Unique ID' })
+  @ApiProperty({ example: 3, description: 'Unique ID' })
   @Column({
     type: DataType.INTEGER,
     unique: true,
@@ -37,11 +37,11 @@ export class Article extends Model<Article> {
   @Column({ type: DataType.STRING })
   image: string;
 
-  @ApiProperty({ example: '56', description: 'Views Count' })
+  @ApiProperty({ example: 56, description: 'Views Count' })
   @Column({ type: DataType.INTEGER, defaultValue: 0 })
   viewsCount: number;
 
-  @ApiProperty({ example: '5', description: 'Author ID' })
+  @ApiProperty({ example: 5, description: 'Author ID' })
   @ForeignKey(() => User)
   @Column({ type: DataType.INTEGER })
   authorId: number;
