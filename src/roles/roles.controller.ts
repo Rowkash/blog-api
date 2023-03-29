@@ -3,6 +3,7 @@ import * as NestDecorators from '@nestjs/common';
 
 import { CreateRoleDto } from './dto/role-create.dto';
 import { RolesService } from './roles.service';
+import { Roles } from 'src/auth/role-auth.decorator';
 
 @Swagger.ApiTags('Roles')
 @NestDecorators.Controller('roles')
@@ -12,6 +13,8 @@ export class RolesController {
   // ---------- Create Role ---------- //
 
   @Swagger.ApiOperation({ summary: 'Create Role' })
+  @Roles('USER')
+  @Roles('ADMIN')
   @NestDecorators.Post()
   create(@NestDecorators.Body() roleDto: CreateRoleDto) {
     return this.roleService.createRole(roleDto);

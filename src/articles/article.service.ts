@@ -1,9 +1,8 @@
-import { UpdateArticleDto } from './dto/update-article.dto';
 import { Injectable, HttpStatus, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { FilesService } from 'src/files/files.service';
-import { CreateArticleDto } from './dto/create-article.dto';
 import { Article } from './article.model';
+import { CreateArticleDto, UpdateArticleDto } from './dto/article.dto';
 
 @Injectable()
 export class ArticlesService {
@@ -14,13 +13,36 @@ export class ArticlesService {
 
   // ---------- Create Article ---------- //
 
-  async createArticle(dto: CreateArticleDto, authorId: number, image: any) {
-    const fileName = await this.fileService.createFile(image);
+  async createArticle(
+    dto: CreateArticleDto,
+    authorId: number,
+  ): Promise<Article> {
+    if (dto.image) {
+      dto.image = await this.fileService.createFile(dto.image);
+    }
+
     const article = await this.articleRepository.create({
       ...dto,
       authorId: authorId,
-      image: fileName,
     });
+
+    return article;
+  }
+
+  // ---------- Update Article By Id ---------- //
+
+  async updateArticle(
+    articleId: number,
+    dto: UpdateArticleDto,
+  ): Promise<Article> {
+    const article = await this.articleRepository.findByPk(articleId);
+
+    if (dto.image) {
+      dto.image = await this.fileService.createFile(dto.image);
+    }
+
+    await article.update(dto);
+
     return article;
   }
 
@@ -46,15 +68,6 @@ export class ArticlesService {
 
     await article.destroy();
     return HttpStatus.NO_CONTENT;
-  }
-
-  // ---------- Update Article By Id ---------- //
-
-  async updateArticle(articleId: number, dto: UpdateArticleDto) {
-    const article = await this.articleRepository.findByPk(articleId);
-
-    await article.update(dto);
-    return article;
   }
 
   // ---------- Get One Article By Id ---------- //

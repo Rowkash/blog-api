@@ -55,8 +55,7 @@ export class UsersController {
 
   @Swagger.ApiOperation({ summary: 'Ban User' })
   @Swagger.ApiOkResponse({ type: User })
-  // @NestDecorators.UseGuards(JwtAuthGuard)
-  @Roles('USER')
+  @Roles('ADMIN')
   @NestDecorators.UseGuards(RoleGuard)
   @NestDecorators.Post('/ban')
   ban(@NestDecorators.Body() dto: BanUserDto) {
