@@ -13,7 +13,6 @@ export class RolesController {
   // ---------- Create Role ---------- //
 
   @Swagger.ApiOperation({ summary: 'Create Role' })
-  @Roles('USER')
   @Roles('ADMIN')
   @NestDecorators.Post()
   create(@NestDecorators.Body() roleDto: CreateRoleDto) {
