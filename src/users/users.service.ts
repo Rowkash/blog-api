@@ -1,8 +1,7 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { RolesService } from 'src/roles/roles.service';
-import { BanUserDto } from './dto/ban-user.dto';
-import { ChangeRoleDto, CreateUserDto } from './dto/user.dto';
+import { BanUserDto, ChangeRoleDto, CreateUserDto } from './dto/user.dto';
 import { User } from './user.model';
 
 @Injectable()
