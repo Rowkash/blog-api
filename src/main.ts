@@ -7,7 +7,7 @@ async function bootstrap() {
   const app = await NestFactory.create(AppModule);
 
   const config = new DocumentBuilder()
-    .setTitle('Blog oo NestJS')
+    .setTitle('Blog on NestJS')
     .setDescription('Documentation REST API')
     .setVersion('1.0.0')
     .addTag('Rusik')
