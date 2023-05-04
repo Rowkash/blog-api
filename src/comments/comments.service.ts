@@ -17,7 +17,7 @@ export class CommentsService {
     dto: CreateCommentDto,
     articleId: number,
     authorId: number,
-  ) {
+  ): Promise<Comment> {
     return await this.commentsRepository.create({
       ...dto,
       articleId,
@@ -32,7 +32,7 @@ export class CommentsService {
     articleId: number,
     authorId: number,
     parentId: number,
-  ) {
+  ): Promise<Comment> {
     return await this.commentsRepository.create({
       ...dto,
       articleId,
@@ -43,7 +43,7 @@ export class CommentsService {
 
   // ---------- Get All Article Comments ---------- //
 
-  async getAllArticleComments(articleId: number) {
+  async getAllArticleComments(articleId: number): Promise<Comment[]> {
     const article = await this.articlesService.getArticleById(articleId);
 
     if (article) {
@@ -56,7 +56,10 @@ export class CommentsService {
 
   // ---------- Update comment ---------- //
 
-  async updateComment(commentId: number, dto: CreateCommentDto) {
+  async updateComment(
+    commentId: number,
+    dto: CreateCommentDto,
+  ): Promise<Comment> {
     const comment = await this.getCommentById(commentId);
     await comment.update(dto);
     return comment;

@@ -48,14 +48,14 @@ export class ArticlesService {
 
   // ---------- Get All Articles ---------- //
 
-  async getAllArticles() {
+  async getAllArticles(): Promise<Article[]> {
     const articles = await this.articleRepository.findAll();
     return articles;
   }
 
   // ---------- Get Article and Increase view count ---------- //
 
-  async getArticleById(articleId: number) {
+  async getArticleById(articleId: number): Promise<Article> {
     const article = await this.articleRepository.findByPk(articleId);
 
     await article.incrementViewCount();
@@ -72,7 +72,7 @@ export class ArticlesService {
 
   // ---------- Get One Article By Id ---------- //
 
-  async getOneArticle(articleId: number) {
+  async getOneArticle(articleId: number): Promise<Article> {
     const article = await this.articleRepository.findByPk(articleId);
     if (!article) {
       throw new NotFoundException(`Article with id ${articleId} not found`);

@@ -18,14 +18,14 @@ export class AuthService {
 
   // ---------- Login User ---------- //
 
-  async login(dto: LoginUserDto) {
+  async login(dto: LoginUserDto): Promise<{ token: string }> {
     const user = await this.validateUser(dto);
     return this.generateToken(user);
   }
 
   // ---------- Registration User ---------- //
 
-  async registration(userDto: CreateUserDto) {
+  async registration(userDto: CreateUserDto): Promise<{ token: string }> {
     const candidate = await this.userService.getUserByEmail(userDto.email);
 
     if (candidate) {
@@ -42,7 +42,7 @@ export class AuthService {
 
   // ---------- Generate Token ---------- //
 
-  private async generateToken(user: User) {
+  private async generateToken(user: User): Promise<{ token: string }> {
     const payload = { email: user.email, id: user.id, roles: user.roles };
     return {
       token: this.jwtService.sign(payload),
@@ -51,7 +51,7 @@ export class AuthService {
 
   // ---------- Validate User ---------- //
 
-  private async validateUser(dto: LoginUserDto) {
+  private async validateUser(dto: LoginUserDto): Promise<User> {
     const user = await this.userService.getUserByEmail(dto.email);
     const passEquals = await bcrypt.compare(dto.password, user.password);
     if (user && passEquals) {

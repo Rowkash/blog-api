@@ -9,14 +9,14 @@ export class RolesService {
 
   // ---------- Create Role ---------- //
 
-  async createRole(roleDto: CreateRoleDto) {
+  async createRole(roleDto: CreateRoleDto): Promise<Role> {
     const role = await this.rolesRepository.create(roleDto);
     return role;
   }
 
   // ---------- Get Role By Value ---------- //
 
-  async getRoleByValue(value: string) {
+  async getRoleByValue(value: string): Promise<Role> {
     const role = await this.rolesRepository.findOne({ where: { value } });
     return role;
   }
