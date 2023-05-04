@@ -3,7 +3,7 @@ import * as NestDecorators from '@nestjs/common';
 import { FileInterceptor } from '@nestjs/platform-express';
 
 import { Article } from 'src/articles/article.model';
-import { ArticlesService } from './article.service';
+import { ArticlesService } from './articles.service';
 
 import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 import { ArticleAuthorGuard } from 'src/guards/article-author.guard';
@@ -28,6 +28,7 @@ export class ArticlesController {
     @NestDecorators.Request() req,
     @NestDecorators.UploadedFile() image,
   ) {
+    console.log(req.user);
     const authorId = req.user.id;
     dto.image = image;
     return this.articlesService.createArticle(dto, authorId);

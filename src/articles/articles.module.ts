@@ -8,7 +8,7 @@ import { User } from 'src/users/user.model';
 import { Comment } from '../comments/comment.model';
 import { Article } from './article.model';
 import { ArticlesController } from './articles.controller';
-import { ArticlesService } from './article.service';
+import { ArticlesService } from './articles.service';
 
 @Module({
   controllers: [ArticlesController],

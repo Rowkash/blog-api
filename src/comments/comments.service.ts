@@ -2,7 +2,7 @@ import { HttpStatus, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
 import { Comment } from './comment.model';
 import { CreateCommentDto } from './dto/create-comment.dto';
-import { ArticlesService } from 'src/articles/article.service';
+import { ArticlesService } from 'src/articles/articles.service';
 
 @Injectable()
 export class CommentsService {

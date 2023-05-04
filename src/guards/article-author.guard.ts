@@ -4,7 +4,7 @@ import {
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
-import { ArticlesService } from 'src/articles/article.service';
+import { ArticlesService } from 'src/articles/articles.service';
 
 @Injectable()
 export class ArticleAuthorGuard implements CanActivate {

@@ -1,20 +1,22 @@
-import { ApiProperty } from '@nestjs/swagger';
+import * as Swagger from '@nestjs/swagger';
 import * as Validator from 'class-validator';
-import { IsOptional } from 'class-validator';
 
 // ---------- Create Article DTO ---------- //
 
 export class CreateArticleDto {
   // ---------- Title ---------- //
 
-  @ApiProperty({ example: 'World Crisis', description: 'Article title' })
+  @Swagger.ApiProperty({
+    example: 'World Crisis',
+    description: 'Article title',
+  })
   @Validator.IsNotEmpty()
   @Validator.IsString()
   readonly title: string;
 
   // ---------- Content ---------- //
 
-  @ApiProperty({
+  @Swagger.ApiProperty({
     example:
       'Google Translate is a web-based free-to-user translation service developed by Google in April 2006. It translates multiple forms of texts and media such as words, phrases and webpages. Originally, Google Translate was released as a statistical machine translation service.',
     description: 'Article text',
@@ -25,8 +27,8 @@ export class CreateArticleDto {
 
   // ---------- Image ---------- //
 
-  @ApiProperty({ type: 'string', format: 'binary', required: false })
-  @IsOptional()
+  @Swagger.ApiProperty({ type: 'string', format: 'binary', required: false })
+  @Validator.IsOptional()
   image: any;
 }
 
