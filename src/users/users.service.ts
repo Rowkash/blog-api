@@ -13,7 +13,7 @@ export class UsersService {
 
   // ---------- Create User ---------- //
 
-  async createUser(dto: CreateUserDto) {
+  async createUser(dto: CreateUserDto): Promise<User> {
     const user = await this.userRepository.create(dto);
     const role = await this.roleService.getRoleByValue('USER');
     await user.$set('roles', [role.id]);
@@ -23,14 +23,14 @@ export class UsersService {
 
   // ---------- Get All Users ---------- //
 
-  async getAllUsers() {
+  async getAllUsers(): Promise<User[]> {
     const users = await this.userRepository.findAll({ include: { all: true } });
     return users;
   }
 
   // ---------- Get User By Email ---------- //
 
-  async getUserByEmail(email: string) {
+  async getUserByEmail(email: string): Promise<User> {
     const user = await this.userRepository.findOne({
       where: { email },
       include: { all: true },
@@ -66,7 +66,7 @@ export class UsersService {
 
   // ---------- Ban User ---------- //
 
-  async ban(dto: BanUserDto) {
+  async ban(dto: BanUserDto): Promise<User> {
     const user = await this.getUserById(dto.userId);
 
     user.banned = true;
@@ -77,7 +77,7 @@ export class UsersService {
 
   // ---------- Get User By Id ---------- //
 
-  async getUserById(userId: number) {
+  async getUserById(userId: number): Promise<User> {
     const user = await this.userRepository.findByPk(userId);
     if (!user) {
       throw new NotFoundException(`User with id ${userId} not found`);
