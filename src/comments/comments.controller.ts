@@ -1,7 +1,7 @@
 import * as NestDecorators from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { CommentAuthorGuard } from 'src/guards/comment-author.guard';
 import { CreateCommentDto } from './dto/create-comment.dto';
 import { CommentsService } from './comments.service';

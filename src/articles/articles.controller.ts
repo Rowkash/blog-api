@@ -5,7 +5,7 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Article } from 'src/articles/article.model';
 import { ArticlesService } from './articles.service';
 
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { ArticleAuthorGuard } from 'src/guards/article-author.guard';
 import { CreateArticleDto, UpdateArticleDto } from './dto/article.dto';
 

@@ -42,7 +42,6 @@ export class ArticlesService {
     }
 
     await article.update(dto);
-
     return article;
   }
 
@@ -65,7 +64,6 @@ export class ArticlesService {
   // ---------- Delete article by Id ---------- //
   async deleteArticle(articleId: number) {
     const article = await this.articleRepository.findByPk(articleId);
-
     await article.destroy();
     return HttpStatus.NO_CONTENT;
   }

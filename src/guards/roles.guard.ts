@@ -1,15 +1,14 @@
 import {
   CanActivate,
   ExecutionContext,
-  HttpException,
-  HttpStatus,
+  ForbiddenException,
   Injectable,
   UnauthorizedException,
 } from '@nestjs/common';
 import { Reflector } from '@nestjs/core';
 import { JwtService } from '@nestjs/jwt';
 import { Observable } from 'rxjs';
-import { ROLES_KEY } from './role-auth.decorator';
+import { ROLES_KEY } from '../auth/role-auth.decorator';
 
 @Injectable()
 export class RoleGuard implements CanActivate {
@@ -39,7 +38,7 @@ export class RoleGuard implements CanActivate {
       req.user = user;
       return user.roles.some((role) => requiredRoles.includes(role.value));
     } catch (error) {
-      throw new HttpException('Not access', HttpStatus.FORBIDDEN);
+      throw new ForbiddenException('Not access');
     }
   }
 }

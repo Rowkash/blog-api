@@ -1,10 +1,10 @@
 import * as NestDecorators from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 
-import { JwtAuthGuard } from './../auth/jwt-auth.guard';
+import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { UsersService } from './users.service';
 import { Roles } from 'src/auth/role-auth.decorator';
-import { RoleGuard } from 'src/auth/roles.guard';
+import { RoleGuard } from 'src/guards/roles.guard';
 import { ValidationPipe } from 'src/pipes/validation.pipe';
 import { User } from './user.model';
 import { BanUserDto, ChangeRoleDto } from './dto/user.dto';

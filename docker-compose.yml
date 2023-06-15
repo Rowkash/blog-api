@@ -19,7 +19,7 @@ services:
     restart: always
   postgres:
     container_name: postgres
-    image: postgres:12
+    image: postgres:latest
     env_file:
       - .development.env
     environment:
