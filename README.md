@@ -88,3 +88,4 @@ docker-compose up
 # -d - to run in the background
 # --build - to rebuild containers
 ```
+### Documentation on using the API is located at the link "http://localhost:5000/api/docs"
