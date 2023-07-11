@@ -43,12 +43,15 @@ export class User extends Model<User> {
   @Column({ type: DataType.STRING, allowNull: true })
   banReason: string;
 
+  @ApiProperty({ type: [Role], description: 'Roles array' })
   @BelongsToMany(() => Role, () => UserRoles)
   roles: Role[];
 
+  @ApiProperty({ type: [Article], description: 'Articles array' })
   @HasMany(() => Article)
   articles: Article[];
 
+  @ApiProperty({ type: [Comment], description: 'Comments array' })
   @HasMany(() => Comment)
   comments: Comment[];
 }

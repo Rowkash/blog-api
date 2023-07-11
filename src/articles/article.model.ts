@@ -46,9 +46,11 @@ export class Article extends Model<Article> {
   @Column({ type: DataType.INTEGER })
   authorId: number;
 
+  @ApiProperty({ type: () => User })
   @BelongsTo(() => User)
   author: User;
 
+  @ApiProperty({ type: () => Comment })
   @HasMany(() => Comment)
   comments: Comment[];
 

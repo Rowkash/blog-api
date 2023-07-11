@@ -5,8 +5,9 @@ import { FileInterceptor } from '@nestjs/platform-express';
 import { Article } from 'src/articles/article.model';
 import { ArticlesService } from './articles.service';
 
-import { JwtAuthGuard } from 'src/guards/jwt-auth.guard';
 import { ArticleAuthorGuard } from 'src/guards/article-author.guard';
+import { AuthGuard } from 'src/guards/auth.guard';
+import { Roles, EnumRole } from 'src/decorators/role-auth.decorator';
 import { CreateArticleDto, UpdateArticleDto } from './dto/article.dto';
 
 @Swagger.ApiTags('Articles')
@@ -20,7 +21,8 @@ export class ArticlesController {
   @Swagger.ApiOperation({ summary: 'Create Article' })
   @Swagger.ApiCreatedResponse({ type: Article })
   @Swagger.ApiConsumes('multipart/form-data')
-  @NestDecorators.UseGuards(JwtAuthGuard)
+  @NestDecorators.UseGuards(AuthGuard)
+  @Roles(EnumRole.USER)
   @NestDecorators.UseInterceptors(FileInterceptor('image'))
   @NestDecorators.Post()
   create(
@@ -28,7 +30,6 @@ export class ArticlesController {
     @NestDecorators.Request() req,
     @NestDecorators.UploadedFile() image,
   ) {
-    console.log(req.user);
     const authorId = req.user.id;
     dto.image = image;
     return this.articlesService.createArticle(dto, authorId);
@@ -39,7 +40,7 @@ export class ArticlesController {
   @Swagger.ApiOperation({ summary: 'Update article by ID' })
   @Swagger.ApiOkResponse({ type: Article })
   @Swagger.ApiConsumes('multipart/form-data')
-  @NestDecorators.UseGuards(JwtAuthGuard, ArticleAuthorGuard)
+  @NestDecorators.UseGuards(AuthGuard, ArticleAuthorGuard)
   @NestDecorators.UseInterceptors(FileInterceptor('image'))
   @NestDecorators.Put('/:id')
   update(
@@ -55,7 +56,7 @@ export class ArticlesController {
 
   @Swagger.ApiOperation({ summary: 'Delete Article by id' })
   @Swagger.ApiNoContentResponse({ content: {} })
-  @NestDecorators.UseGuards(JwtAuthGuard, ArticleAuthorGuard)
+  @NestDecorators.UseGuards(AuthGuard, ArticleAuthorGuard)
   @NestDecorators.Delete('/:id')
   delete(@NestDecorators.Param('id', NestDecorators.ParseIntPipe) id: number) {
     return this.articlesService.deleteArticle(id);

@@ -1,20 +1,24 @@
-import { UserRoles } from 'src/roles/user-roles.model';
 import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { ConfigModule } from '@nestjs/config';
 import { SequelizeModule } from '@nestjs/sequelize';
+import * as path from 'path';
+import { ServeStaticModule } from '@nestjs/serve-static';
+
+import { UserRoles } from 'src/roles/user-roles.model';
 import { User } from './users/user.model';
+import { Role } from './roles/role.model';
+import { Article } from './articles/article.model';
+import { Comment } from './comments/comment.model';
+
 import { UsersModule } from './users/users.module';
 import { AuthModule } from './auth/auth.module';
 import { RolesModule } from './roles/roles.module';
-import { Role } from './roles/role.model';
 import { ArticlesModule } from './articles/articles.module';
-import { Article } from './articles/article.model';
 import { FilesModule } from './files/files.module';
-import { ServeStaticModule } from '@nestjs/serve-static';
-import * as path from 'path';
-import { Comment } from './comments/comment.model';
 import { CommentsModule } from './comments/comments.module';
-import { CheckArticleMiddleware } from './middleware/article.middleware';
+
+import { CheckArticleMiddleware } from './middleware/check-article.middleware';
+import { AuthMiddleware } from './middleware/auth.middleware';
 
 @Module({
   imports: [
@@ -39,13 +43,10 @@ import { CheckArticleMiddleware } from './middleware/article.middleware';
     FilesModule,
     CommentsModule,
   ],
-  controllers: [],
-  providers: [],
 })
 export class AppModule implements NestModule {
-  // ---------- Check Article Id Middleware ---------- //
-
   configure(consumer: MiddlewareConsumer) {
+    consumer.apply(AuthMiddleware).forRoutes('/');
     consumer.apply(CheckArticleMiddleware).forRoutes('articles/:articleId');
   }
 }

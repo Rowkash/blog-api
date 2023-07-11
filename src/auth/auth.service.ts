@@ -5,9 +5,9 @@ import {
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { UsersService } from 'src/users/users.service';
-import * as bcrypt from 'bcrypt';
 import { User } from 'src/users/user.model';
 import { CreateUserDto, LoginUserDto } from 'src/users/dto/user.dto';
+import { hash, verify } from 'argon2';
 
 @Injectable()
 export class AuthService {
@@ -29,10 +29,10 @@ export class AuthService {
     const candidate = await this.userService.getUserByEmail(userDto.email);
 
     if (candidate) {
-      throw new BadRequestException('User with this email already exist');
+      throw new BadRequestException('Email already exist');
     }
 
-    const hashPass = await bcrypt.hash(userDto.password, 5);
+    const hashPass = await hash(userDto.password);
     const user = await this.userService.createUser({
       ...userDto,
       password: hashPass,
@@ -43,19 +43,20 @@ export class AuthService {
   // ---------- Generate Token ---------- //
 
   private async generateToken(user: User): Promise<{ token: string }> {
-    const payload = { email: user.email, id: user.id, roles: user.roles };
-    return {
-      token: this.jwtService.sign(payload),
-    };
+    const data = { id: user.id, roles: user.roles };
+    const token = this.jwtService.sign(data, {
+      expiresIn: '24h',
+    });
+    return { token };
   }
 
   // ---------- Validate User ---------- //
 
   private async validateUser(dto: LoginUserDto): Promise<User> {
     const user = await this.userService.getUserByEmail(dto.email);
-    const passEquals = await bcrypt.compare(dto.password, user.password);
-    if (user && passEquals) {
-      return user;
+    if (user) {
+      const passEquals = await verify(user.password, dto.password);
+      if (passEquals) return user;
     }
 
     throw new UnauthorizedException({ message: 'Wrong email or password' });

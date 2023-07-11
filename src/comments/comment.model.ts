@@ -31,6 +31,7 @@ export class Comment extends Model<Comment> {
   @Column({ type: DataType.INTEGER })
   authorId: number;
 
+  @ApiProperty({ type: () => User })
   @BelongsTo(() => User)
   author: User;
 
@@ -39,6 +40,7 @@ export class Comment extends Model<Comment> {
   @Column({ type: DataType.INTEGER })
   articleId: number;
 
+  @ApiProperty({ type: Article, description: 'Article' })
   @BelongsTo(() => Article)
   article: Article;
 

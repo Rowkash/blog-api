@@ -1,7 +1,8 @@
-import { Injectable, HttpStatus, NotFoundException } from '@nestjs/common';
+import { Injectable, HttpStatus } from '@nestjs/common';
 import { InjectModel } from '@nestjs/sequelize';
-import { FilesService } from 'src/files/files.service';
+
 import { Article } from './article.model';
+import { FilesService } from 'src/files/files.service';
 import { CreateArticleDto, UpdateArticleDto } from './dto/article.dto';
 
 @Injectable()
@@ -72,9 +73,6 @@ export class ArticlesService {
 
   async getOneArticle(articleId: number): Promise<Article> {
     const article = await this.articleRepository.findByPk(articleId);
-    if (!article) {
-      throw new NotFoundException(`Article with id ${articleId} not found`);
-    }
     return article;
   }
 }

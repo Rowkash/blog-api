@@ -44,11 +44,11 @@ export class BanUserDto {
 // --------- Change User Role DTO ---------- //
 
 export class ChangeRoleDto {
-  @Swagger.ApiProperty({ example: 'ADMIN', description: 'Role name' })
-  @Validator.IsString({ message: 'Should be a string' })
-  readonly value: string;
-
   @Swagger.ApiProperty({ example: 3, description: 'User ID' })
   @Validator.IsNumber({}, { message: 'Should be a number' })
   readonly userId: number;
+
+  @Swagger.ApiProperty({ example: 'ADMIN', description: 'Role name' })
+  @Validator.IsString({ message: 'Should be a string' })
+  readonly value: string;
 }

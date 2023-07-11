@@ -13,4 +13,6 @@ COPY . .
 
 COPY ./dist ./dist
 
+RUN chown -R node:node /app
+
 CMD [ "pnpm", "run", "start:dev" ]

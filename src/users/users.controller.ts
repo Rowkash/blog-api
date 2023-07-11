@@ -1,13 +1,12 @@
 import * as NestDecorators from '@nestjs/common';
 import * as Swagger from '@nestjs/swagger';
 
-import { JwtAuthGuard } from '../guards/jwt-auth.guard';
 import { UsersService } from './users.service';
-import { Roles } from 'src/auth/role-auth.decorator';
-import { RoleGuard } from 'src/guards/roles.guard';
+import { Roles, EnumRole } from 'src/decorators/role-auth.decorator';
 import { ValidationPipe } from 'src/pipes/validation.pipe';
 import { User } from './user.model';
 import { BanUserDto, ChangeRoleDto } from './dto/user.dto';
+import { AuthGuard } from 'src/guards/auth.guard';
 
 @Swagger.ApiTags('Users')
 @Swagger.ApiBearerAuth()
@@ -20,8 +19,8 @@ export class UsersController {
   @Swagger.ApiOperation({ summary: 'Get all users' })
   @Swagger.ApiOkResponse({ type: [User] })
   @Swagger.ApiForbiddenResponse({ description: 'Forbidden' })
-  @Roles('USER')
-  @NestDecorators.UseGuards(RoleGuard)
+  @NestDecorators.UseGuards(AuthGuard)
+  @Roles(EnumRole.ADMIN)
   @NestDecorators.Get()
   getAll() {
     return this.userService.getAllUsers();
@@ -32,8 +31,8 @@ export class UsersController {
   @Swagger.ApiOperation({ summary: 'Add role to User' })
   @Swagger.ApiOkResponse()
   @NestDecorators.UsePipes(ValidationPipe)
-  @Roles('ADMIN')
-  @NestDecorators.UseGuards(RoleGuard)
+  @NestDecorators.UseGuards(AuthGuard)
+  @Roles(EnumRole.ADMIN)
   @NestDecorators.Post('/role')
   getRole(@NestDecorators.Body() dto: ChangeRoleDto) {
     return this.userService.getRole(dto);
@@ -43,9 +42,8 @@ export class UsersController {
 
   @Swagger.ApiOperation({ summary: 'Remove role from User' })
   @Swagger.ApiOkResponse()
-  @NestDecorators.UseGuards(JwtAuthGuard)
-  @Roles('ADMIN')
-  @NestDecorators.UseGuards(RoleGuard)
+  @NestDecorators.UseGuards(AuthGuard)
+  @Roles(EnumRole.ADMIN)
   @NestDecorators.Delete('/role')
   removeRole(@NestDecorators.Body() dto: ChangeRoleDto) {
     return this.userService.removeRole(dto);
@@ -55,8 +53,8 @@ export class UsersController {
 
   @Swagger.ApiOperation({ summary: 'Ban User' })
   @Swagger.ApiOkResponse({ type: User })
-  @Roles('ADMIN')
-  @NestDecorators.UseGuards(RoleGuard)
+  @NestDecorators.UseGuards(AuthGuard)
+  @Roles(EnumRole.ADMIN)
   @NestDecorators.Post('/ban')
   ban(@NestDecorators.Body() dto: BanUserDto) {
     return this.userService.ban(dto);
